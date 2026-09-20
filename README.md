@@ -1,149 +1,121 @@
-# 🤖 Agente Financeiro Inteligente com IA Generativa
+# 🤖 PoupeAI — Agente Financeiro Inteligente
 
-## Contexto
+Projeto desenvolvido no Lab **"Bia do Futuro" (DIO)**, que propõe idealizar e prototipar um agente financeiro com IA Generativa capaz de antecipar necessidades, personalizar sugestões e ajudar o usuário de forma consultiva e segura.
 
-Os assistentes virtuais no setor financeiro estão evoluindo de simples chatbots reativos para **agentes inteligentes e proativos**. Neste desafio, você vai idealizar e prototipar um agente financeiro que utiliza IA Generativa para:
+## Sobre o PoupeAI
 
-- **Antecipar necessidades** ao invés de apenas responder perguntas
-- **Personalizar** sugestões com base no contexto de cada cliente
-- **Cocriar soluções** financeiras de forma consultiva
-- **Garantir segurança** e confiabilidade nas respostas (anti-alucinação)
+O **PoupeAI** é um agente educador e auxiliar financeiro focado em ajudar pessoas que perdem o controle dos próprios gastos — evitando que parcelas acumuladas estourem o limite do cartão — e, quando solicitado, orientar a distribuição da carteira de investimentos sempre priorizando gastos essenciais (água, energia, aluguel, internet).
 
-> [!TIP]
-> Na pasta [`examples/`](./examples/) você encontra referências de implementação para cada etapa deste desafio.
+O agente roda **100% localmente** via [Ollama](https://ollama.ai/), sem exportar dados do usuário para serviços externos e sem custo de API.
 
----
+### Principais características
 
-## O Que Você Deve Entregar
-
-### 1. Documentação do Agente
-
-Defina **o que** seu agente faz e **como** ele funciona:
-
-- **Caso de Uso:** Qual problema financeiro ele resolve? (ex: consultoria de investimentos, planejamento de metas, alertas de gastos)
-- **Persona e Tom de Voz:** Como o agente se comporta e se comunica?
-- **Arquitetura:** Fluxo de dados e integração com a base de conhecimento
-- **Segurança:** Como evitar alucinações e garantir respostas confiáveis?
-
-📄 **Template:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
+- **Controle de gastos:** analisa transações e histórico de atendimento para responder sobre hábitos financeiros do usuário
+- **Consultoria de investimentos:** sugere distribuição de carteira com base no perfil do investidor, só quando solicitado
+- **Anti-alucinação:** respostas sempre baseadas nos dados fornecidos no contexto, nunca inventadas
+- **Foco e segurança:** recusa perguntas fora do tema financeiro e nunca expõe dados sensíveis
 
 ---
 
-### 2. Base de Conhecimento
+## Arquitetura
 
-Utilize os **dados mockados** disponíveis na pasta [`data/`](./data/) para alimentar seu agente:
+```mermaid
+flowchart TD
+    A[Cliente] -->|Mensagem| B[Interface Streamlit]
+    B --> C[LLM via Ollama]
+    C --> D[Base de Conhecimento]
+    D --> C
+    C --> E[Validação]
+    E --> F[Resposta]
+```
 
-| Arquivo | Formato | Descrição |
-|---------|---------|-----------|
-| `transacoes.csv` | CSV | Histórico de transações do cliente |
-| `historico_atendimento.csv` | CSV | Histórico de atendimentos anteriores |
-| `perfil_investidor.json` | JSON | Perfil e preferências do cliente |
-| `produtos_financeiros.json` | JSON | Produtos e serviços disponíveis |
-
-Você pode adaptar ou expandir esses dados conforme seu caso de uso.
-
-📄 **Template:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
-
----
-
-### 3. Prompts do Agente
-
-Documente os prompts que definem o comportamento do seu agente:
-
-- **System Prompt:** Instruções gerais de comportamento e restrições
-- **Exemplos de Interação:** Cenários de uso com entrada e saída esperada
-- **Tratamento de Edge Cases:** Como o agente lida com situações limite
-
-📄 **Template:** [`docs/03-prompts.md`](./docs/03-prompts.md)
-
----
-
-### 4. Aplicação Funcional
-
-Desenvolva um **protótipo funcional** do seu agente:
-
-- Chatbot interativo (sugestão: Streamlit, Gradio ou similar)
-- Integração com LLM (via API ou modelo local)
-- Conexão com a base de conhecimento
-
-📁 **Pasta:** [`src/`](./src/)
-
----
-
-### 5. Avaliação e Métricas
-
-Descreva como você avalia a qualidade do seu agente:
-
-**Métricas Sugeridas:**
-- Precisão/assertividade das respostas
-- Taxa de respostas seguras (sem alucinações)
-- Coerência com o perfil do cliente
-
-📄 **Template:** [`docs/04-metricas.md`](./docs/04-metricas.md)
-
----
-
-### 6. Pitch
-
-Grave um **pitch de 3 minutos** (estilo elevador) apresentando:
-
-- Qual problema seu agente resolve?
-- Como ele funciona na prática?
-- Por que essa solução é inovadora?
-
-📄 **Template:** [`docs/05-pitch.md`](./docs/05-pitch.md)
-
----
-
-## Ferramentas Sugeridas
-
-Todas as ferramentas abaixo possuem versões gratuitas:
-
-| Categoria | Ferramentas |
-|-----------|-------------|
-| **LLMs** | [ChatGPT](https://chat.openai.com/), [Copilot](https://copilot.microsoft.com/), [Gemini](https://gemini.google.com/), [Claude](https://claude.ai/), [Ollama](https://ollama.ai/) |
-| **Desenvolvimento** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
-| **Orquestração** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
-| **Diagramas** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
+| Componente | Descrição |
+|------------|-----------|
+| Interface | [Streamlit](https://streamlit.io) |
+| LLM | [Ollama](https://ollama.ai/) (execução local) |
+| Base de Conhecimento | Dados mockados em JSON/CSV |
+| Validação | Checagem de coerência das respostas e cálculos |
 
 ---
 
 ## Estrutura do Repositório
 
 ```
-📁 lab-agente-financeiro/
+📁 dio-lab-bia-do-futuro/
 │
 ├── 📄 README.md
 │
-├── 📁 data/                          # Dados mockados para o agente
-│   ├── historico_atendimento.csv     # Histórico de atendimentos (CSV)
-│   ├── perfil_investidor.json        # Perfil do cliente (JSON)
-│   ├── produtos_financeiros.json     # Produtos disponíveis (JSON)
-│   └── transacoes.csv                # Histórico de transações (CSV)
+├── 📁 data/                          # Dados mockados usados pelo agente
+│   ├── historico_atendimento.csv     # Histórico de atendimentos
+│   ├── perfil_investidor.json        # Perfil e metas do cliente
+│   ├── produtos_financeiros.json     # Produtos financeiros disponíveis
+│   └── transacoes.csv                # Histórico de transações
 │
 ├── 📁 docs/                          # Documentação do projeto
-│   ├── 01-documentacao-agente.md     # Caso de uso e arquitetura
+│   ├── 01-documentacao-agente.md     # Caso de uso, persona e arquitetura
 │   ├── 02-base-conhecimento.md       # Estratégia de dados
-│   ├── 03-prompts.md                 # Engenharia de prompts
+│   ├── 03-prompts.md                 # System prompt e exemplos de interação
 │   ├── 04-metricas.md                # Avaliação e métricas
 │   └── 05-pitch.md                   # Roteiro do pitch
 │
 ├── 📁 src/                           # Código da aplicação
-│   └── app.py                        # (exemplo de estrutura)
+│   └── app.py                        # Aplicação Streamlit do PoupeAI
 │
-├── 📁 assets/                        # Imagens e diagramas
-│   └── ...
+├── 📁 assets/                        # Imagens, diagramas e roteiro do lab
 │
-└── 📁 examples/                      # Referências e exemplos
-    └── README.md
+└── 📁 examples/                      # Referências de implementação
 ```
 
 ---
 
-## Dicas Finais
+## Como Executar
 
-1. **Comece pelo prompt:** Um bom system prompt é a base de um agente eficaz
-2. **Use os dados mockados:** Eles garantem consistência e evitam problemas com dados sensíveis
-3. **Foque na segurança:** No setor financeiro, evitar alucinações é crítico
-4. **Teste cenários reais:** Simule perguntas que um cliente faria de verdade
-5. **Seja direto no pitch:** 3 minutos passam rápido, vá ao ponto
+### Pré-requisitos
+
+- Python 3.10+
+- [Ollama](https://ollama.ai/) instalado e com um modelo baixado localmente
+
+### Passos
+
+```bash
+# Instale as dependências
+pip install streamlit pandas requests
+
+# Suba o Ollama com o modelo desejado
+ollama serve
+
+# Ajuste a porta e o nome do modelo em src/app.py (OLLARAMA_URL e MODELO)
+
+# Rode a aplicação
+streamlit run src/app.py
+```
+
+---
+
+## Documentação
+
+| Documento | Conteúdo |
+|-----------|----------|
+| [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md) | Caso de uso, persona, tom de voz, arquitetura e segurança |
+| [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md) | Como os dados são carregados e usados no contexto |
+| [`docs/03-prompts.md`](./docs/03-prompts.md) | System prompt, exemplos de interação e edge cases |
+| [`docs/04-metricas.md`](./docs/04-metricas.md) | Cenários de teste e avaliação de qualidade |
+| [`docs/05-pitch.md`](./docs/05-pitch.md) | Roteiro do pitch de 3 minutos |
+
+---
+
+## Regras do Agente
+
+1. Sempre baseia as respostas nos dados fornecidos
+2. Nunca inventa informações financeiras
+3. Admite quando não sabe algo e oferece alternativas
+4. Nunca expõe dados sensíveis ou de outros usuários
+5. Não abre arquivos suspeitos (`.bat`, `.ps1`, etc.)
+6. Só recomenda investimentos alinhados ao perfil e à realidade do usuário
+7. Não responde perguntas fora do tema financeiro
+
+---
+
+## Créditos
+
+Projeto baseado no desafio **"Bia do Futuro"** da [Digital Innovation One (DIO)](https://www.dio.me/).
