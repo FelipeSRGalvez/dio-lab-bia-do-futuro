@@ -29,19 +29,14 @@ Não alterei nada
 Os arquivos são carregados na conversa e são armazenados no contexto e só são exibidos caso o usuário peça ou para realizar opiniões e exibição de dados concretos, carregando por meio de código
 
 ```python
+# Bibliotecas para puxar os dados
 import pandas as pd
 import json as js
 
-#CSV
-historico_atendimento = pd.read_csv("data/historico_atendimento.csv")
+perfil = js.load(open("data/perfil_investidor.json", "r"))
+produtos = js.load(open("data/produtos_financeiros.json", "r"))
+historico = pd.read_csv("data/historico_atendimento.csv")
 transacoes = pd.read_csv("data/transacoes.csv")
-
-#JSON
-with open("data/perfil_investidor.json", "r") as f:
-  perfil = js.load(f)
-
-with open("data/produtos_financeiros.json", "r") as f:
-  produtos = js.load(f)
 ```
 
 ### Como os dados são usados no prompt?
